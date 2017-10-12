@@ -1,0 +1,45 @@
+#!/bin/bash
+usage() {
+if [ $# -ne 3 ]; then
+  echo "Your command: $0 $*"
+  echo "Usage: tidy4 <tidy dir> <src dir> <obj dir>"
+  exit 1
+fi
+}
+
+dirExists() {
+if [ -d "$1" ]
+then
+  echo "Tidying directory $1 ..."
+else
+  echo "$1 does not exist"
+  exit 1
+fi
+}
+
+ensureDir() {
+  if [ ! -d $1 ]
+  then
+    if [ -f $1 ]
+    then
+      echo "file named $1 exists"
+      exit 1
+    else
+      mkdir $1
+    fi
+  fi
+}
+
+moveFiles() {
+  for f in $2/*$1
+  do
+    mv $f $3
+  done
+}
+
+usage $*
+dirExists $1  || exit 1
+ensureDir $2  || exit 1
+moveFiles .c $1 $2
+ensureDir $3  && moveFiles .o $1 $3 || exit 1
+
