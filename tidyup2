@@ -2,7 +2,8 @@
 function usage() { 
 		 [[ $# -eq 3 ]] \
                  || echo -e "your command $*\n "\
-		            "useage: $0 <tidydir> <srcdir> <objdir>" 
+		            "useage: $0 <tidydir> <srcdir> <objdir>" \
+		 && exit 1
  }
  
 function ensuredir() { 
@@ -15,8 +16,8 @@ function moveFiles() {
 		 done
 }
 
-usage $*
-test -d $1 || exit 1
-ensuredir $2 && moveFiles .c $1 $2 || exit 1
-ensuredir $3 && moveFiles .o $1 $3 || exit 1
+usage $* || exit
+test -d $1 || exit 
+ensuredir $2 && moveFiles .c $1 $2 || exit 
+ensuredir $3 && moveFiles .o $1 $3 || exit 
 
